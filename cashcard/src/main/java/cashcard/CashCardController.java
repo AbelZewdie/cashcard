@@ -11,7 +11,8 @@ class CashCardController {
 
     // implement a findById() method to handle incoming HTTP requests.
     @GetMapping("/{requestedId}")  // @GetMapping marks a method as a handler method. GET requests that match cashcards/{requestedID} will be handled by this method.
-    private ResponseEntity<String> findById() {
-        return ResponseEntity.ok("{}");
+    private ResponseEntity<CashCard> findById() {
+        CashCard cashCard = new CashCard(99L, 123.45);
+        return ResponseEntity.ok(cashCard);
     }
 }

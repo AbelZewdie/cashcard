@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController     // This tells Spring that this class is a Component of type RestController and capable of handling HTTP requests.
 @RequestMapping("/cashcards")   // This is a companion to @RestController that indicates which address requests must have to access this Controller.
 class CashCardController {
@@ -19,9 +21,9 @@ class CashCardController {
     // implement a findById() method to handle incoming HTTP requests.
     @GetMapping("/{requestedId}")  // @GetMapping marks a method as a handler method. GET requests that match cashcards/{requestedID} will be handled by this method.
     private ResponseEntity<CashCard> findById(@PathVariable Long requestedId) {  // if we don't use PathVariable we are not defining the url for that specific id.
-        if (requestedId.equals(99L)) {
-            CashCard cashCard = new CashCard(99L, 123.45);
-            return ResponseEntity.ok(cashCard);
+        Optional<CashCard> cashCardOptional = cashCardRepository.findById(requestedId); // We're calling CrudRepository.findById, which returns an Optional. This smart object might or might not contain the CashCard for which we're searching.
+        if (cashCardOptional.isPresent()) { // isPresent() will return the true.
+            return ResponseEntity.ok(cashCardOptional.get()); // get() will return the value.
         } else {
             return ResponseEntity.notFound().build();
         }
